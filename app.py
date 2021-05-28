@@ -7,6 +7,7 @@ import requests
 # Taxi Fare Calculator
 '''
 
+# map starting coords
 pickup_lon = -73.9798156
 pickup_lat = 40.7614327
 dropoff_lon = -73.8803331
@@ -23,10 +24,6 @@ passenger_count = st.sidebar.slider("Number of passengers",1,5)
 
 map_loc = pd.DataFrame({'lon': [pickup_lon, dropoff_lon], 'lat': [pickup_lat, dropoff_lat]},index=['pickup', 'dropoff'])
 
-map_loc
-
-st.map(data=map_loc,zoom=10)
-
 url = 'https://taxifare.lewagon.ai/predict'
 
 params = {"pickup_datetime": date_time,
@@ -36,9 +33,10 @@ params = {"pickup_datetime": date_time,
           "dropoff_latitude": dropoff_lat,
           "passenger_count": passenger_count}
 
-
 if st.button('Calculate fare!'):
     response = requests.get(url, params=params)
     prediction = response.json()['prediction']
-    st.markdown("## Expected fare:")
-    st.write(prediction)
+    #st.markdown("## Expected fare:")
+    st.write("${0:.2f}".format(prediction))
+
+st.map(data=map_loc,zoom=10)
